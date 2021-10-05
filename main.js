@@ -8,7 +8,7 @@ import Face from "./WEBGL/Face.js";
 let canvas, scene;
 let bottle, bottle1
 
-let speed = .5
+let speed = .0124
 
 function main() {
     canvas = document.querySelector("#glCanvas");
