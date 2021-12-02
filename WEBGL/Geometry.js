@@ -7,9 +7,10 @@ export default class Geometry {
 	_normals = []
 
 	//position :Vector3
-	constructor (position = new Vector3(0, 0, 0), color = new Color(255, 0, 0)) {
+	constructor (position = new Vector3(0, 0, 0), color = new Color(255, 0, 0), specular = 1) {
 		this.position = position
 		this.color = color
+		this.specular = specular
 	}
 
 	_calculateNormals (vertices) {
@@ -68,11 +69,13 @@ export default class Geometry {
 		let faceNormals = []
 
 		this._normals.forEach(normal => faceNormals.push(...normal.getArray()))
-		console.log(this._normals)
-		console.log(faceNormals)
-
 
 		return faceNormals
+	}
+
+	getSpecular () {
+		let specular = Array(this._vertices.length).fill(this.specular)
+		return specular
 	}
 
 	getVerticeArray () {

@@ -14,10 +14,18 @@ function main () {
 	canvas = document.querySelector('#glCanvas')
 	scene = new Scene(canvas)
 
-	bottle = new EssentialOilBottle(new Vector3(50, -50, 0), true)
+	bottle = new EssentialOilBottle(
+		new Vector3(50, -50, 0),
+		90,
+		true
+	)
 	scene.add(bottle)
 
-	bottle1 = new EssentialOilBottle(new Vector3(-50, -30, 0), true)
+	bottle1 = new EssentialOilBottle(
+		new Vector3(-50, -30, 0),
+		90,
+		true
+	)
 
 	scene.add(bottle1)
 	// let label = new Geometry(bottle1.position.clone(), new Color(60, 60, 60))

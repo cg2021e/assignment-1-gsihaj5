@@ -6,8 +6,9 @@ import Vector3 from './WEBGL/Vector3.js'
 export default class EssentialOilBottle extends Geometry {
 	_geometries = []
 
-	constructor (position, needRotation = false) {
+	constructor (position, specular, needRotation = false) {
 		super(position)
+		this.specular = specular
 		this.needRotation = needRotation
 		this._initGeometry()
 	}
@@ -144,5 +145,12 @@ export default class EssentialOilBottle extends Geometry {
 		})
 
 		return vertices
+	}
+
+	getSpecular () {
+		let vertice_length = 0
+		this._geometries.forEach((geometry) => vertice_length += geometry.getVerticeArray().length)
+		let specular = Array(vertice_length).fill(this.specular)
+		return specular
 	}
 }

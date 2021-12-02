@@ -25,14 +25,19 @@ export default class Scene {
             attribute vec3 aCoordinates;
             attribute vec3 aColors;
             attribute vec3 aNormal;
+            attribute float aShininessConstant;
             uniform mat4 uProjectionMatrix;
             uniform mat4 uViewMatrix;
             varying vec4 vColor;
+            varying vec3 vCoordinates;
             varying vec3 vNormal;
+            varying float vShininessConstant;
             void main(){
                 gl_Position =  uProjectionMatrix * uViewMatrix *  vec4(aCoordinates.x / 100.0, aCoordinates.y / 100.0, aCoordinates.z / 100.0, 1.0);
                 vColor = vec4(aColors, 1);
-                
+                vNormal = aNormal;
+                vCoordinates = vec3(aCoordinates.x / 100.0, aCoordinates.y / 100.0, aCoordinates.z / 100.0);
+                vShininessConstant = aShininessConstant;
             }`
 
 		let vertexShader = this.context.createShader(this.context.VERTEX_SHADER)
@@ -50,13 +55,40 @@ export default class Scene {
 		let fragmentShaderCode = `
 			precision mediump float;
             varying vec4 vColor;
+            varying vec3 vCoordinates;
             varying vec3 vNormal;
+            varying float vShininessConstant;
             uniform vec3 uLightConstant;
+            uniform vec3 uLightPosition;
+            uniform vec3 uCameraPosition;
             uniform float uAmbientIntensity;
             
             void main(){
                 vec3 ambient = uLightConstant * uAmbientIntensity;
-                vec3 phong = ambient;
+                vec3 lightDirection = uLightPosition - vCoordinates;
+                vec3 normalizedLight = normalize(lightDirection);
+                vec3 normalizedNormal = normalize(vNormal);
+                
+                float cosTheta = dot(normalizedNormal, normalizedLight);
+                vec3 diffuse = vec3(0,0,0);
+                
+                if(cosTheta > 0.){
+                	float diffuseIntensity = cosTheta;
+                	diffuse = uLightConstant * diffuseIntensity;
+                }
+                
+                vec3 reflector = reflect(-lightDirection, normalizedNormal);
+                vec3 normalizedReflector = normalize(reflector);
+                vec3 normalizedViewer = normalize(uCameraPosition - vCoordinates);
+                float cosPhi = dot(normalizedReflector, normalizedViewer);
+                vec3 specular =  vec3(0.,0.,0.);
+                
+                if(cosPhi > 0.){
+                	float specularIntensity = pow(cosPhi, vShininessConstant);
+                	specular = uLightConstant * specularIntensity;
+                }
+                
+                vec3 phong = ambient + diffuse + specular;
                 gl_FragColor = vec4(phong.x * vColor.x, phong.y * vColor.y, phong.z * vColor.z, vColor.w);
             }`
 
@@ -105,15 +137,19 @@ export default class Scene {
 		let vertices = []
 		let colors = []
 		let normals = []
+		let speculars = []
 
 		this.geometries.forEach((geometry) => {
 			vertices.push(...geometry.getVerticeArray())
 			colors.push(...geometry.getColorArray())
 			normals.push(...geometry.getNormalArray())
+			speculars.push(...geometry.getSpecular())
 		})
 
 		vertices = new Float32Array([...vertices])
 		colors = new Float32Array([...colors])
+		normals = new Float32Array([...normals])
+		speculars = new Float32Array([...speculars])
 
 		this.context.enable(this.context.DEPTH_TEST)
 		this.context.depthFunc(this.context.LEQUAL)
@@ -145,8 +181,14 @@ export default class Scene {
 		this._bindArrayInsideShader(vertices, 'aCoordinates')
 		this._bindArrayInsideShader(colors, 'aColors')
 		this._bindArrayInsideShader(normals, 'aNormal')
+		this._bindArrayInsideShader(speculars, 'aShininessConstant')
 		this._bindUniformArrayInsideShader([1, 1, 1], 'uLightConstant')
+		this._bindUniformArrayInsideShader([0, 0, 0], 'uLightPosition')
+		this._bindUniformArrayInsideShader([0, 0, 3], 'uCameraPosition')
 		this._bindUniformDataInsideShader(.414, 'uAmbientIntensity')
+		console.log(speculars)
+		console.log(vertices)
+		console.log(normals)
 
 		this.context.drawArrays(this.context.TRIANGLES, 0, vertices.length / 3)
 	}
