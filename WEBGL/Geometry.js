@@ -86,7 +86,13 @@ export default class Geometry {
 		let vertices = []
 
 		this._faces.forEach((faces) => {
-			faces.getArray().forEach((index) => vertices.push(...this._vertices[index].getArray()))
+			faces.getArray().forEach((index) => {
+				let verticeArray = this._vertices[index].getArray()
+				verticeArray[0] += this.position.x
+				verticeArray[1] += this.position.y
+				verticeArray[2] += this.position.z
+				vertices.push(...verticeArray)
+			})
 		})
 
 		return vertices

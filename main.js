@@ -8,7 +8,7 @@ import Face from './WEBGL/Face.js'
 let canvas, scene
 let bottle, bottle1
 
-let speed = .0124
+let speed = 10
 
 function main () {
 	canvas = document.querySelector('#glCanvas')
@@ -30,10 +30,34 @@ function main () {
 	)
 
 	scene.add(bottle1)
+	scene.add(createLabel())
+
+	let box = createBox()
+	scene.add(box)
+
+	scene.render()
+
+	document.addEventListener('keydown', (event) => {
+		//W
+		if (event.keyCode === 87) {
+			box.position.y += 10
+			scene.lightPosition[1] += 10
+		}
+		//S
+		if (event.keyCode === 83) {
+			box.position.y -= 10
+			scene.lightPosition[1] -= 10
+		}
+		scene.render()
+
+	})
+}
+
+function createLabel () {
 	let label = new Geometry(bottle1.position.clone(), new Color(60, 60, 60))
 
-	let offsetX = -45
-	let offsetY = -35
+	let offsetX = 5
+	let offsetY = 15
 	let offsetZ = 100
 	let width = 15
 	let height = 20
@@ -47,28 +71,43 @@ function main () {
 	label.addFace(new Face(0, 3, 2))
 
 	label.calculateNormal()
-
-	scene.add(label)
-
-	scene.render()
+	return label
 }
 
-// function update() {
-//     if (bottle.position.y <= -75 || bottle.position.y > 0)
-//         speed *= -1
-//
-//     bottle.translate(0, speed, 0)
-//
-//     scene.render();
-// }
+function createBox () {
+	let cube = new Geometry(new Vector3(0, 0, 0), new Color(255, 0, 0))
+	let width = 15
+	let height = 15
+	let depth = 15
 
-function animate () {
-	requestAnimationFrame(animate)
-	// update();
+	//atas
+	cube.addVertice(new Vector3(width / 2, height / 2, depth / 2))//depan kanan
+	cube.addVertice(new Vector3(width / 2, height / 2, -depth / 2))//belakang kanan
+	cube.addVertice(new Vector3(-width / 2, height / 2, depth / 2))//depan kiri
+	cube.addVertice(new Vector3(-width / 2, height / 2, -depth / 2))//belakang kiri
+
+	//bawah
+	cube.addVertice(new Vector3(width / 2, -height / 2, depth / 2))//depan kanan
+	cube.addVertice(new Vector3(width / 2, -height / 2, -depth / 2))//belakang kanan
+	cube.addVertice(new Vector3(-width / 2, -height / 2, depth / 2))//depan kiri
+	cube.addVertice(new Vector3(-width / 2, -height / 2, -depth / 2))//belakang kiri
+
+	//bawah
+	cube.addFace(new Face(0, 2, 1))
+	cube.addFace(new Face(2, 3, 0))
+
+	//depan
+	cube.addFace(new Face(0, 4, 2))
+	cube.addFace(new Face(2, 4, 6))
+	//atas
+	cube.addFace(new Face(4, 5, 6))
+	cube.addFace(new Face(6, 5, 7))
+
+	cube.calculateNormal()
+	return cube
 }
 
 window.onload = () => {
 	main()
-	animate()
 }
 
