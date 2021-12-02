@@ -16,14 +16,16 @@ function main () {
 
 	bottle = new EssentialOilBottle(
 		new Vector3(50, -50, 0),
-		90,
+		10,
+		100,
 		true
 	)
 	scene.add(bottle)
 
 	bottle1 = new EssentialOilBottle(
-		new Vector3(-50, -30, 0),
-		90,
+		new Vector3(-50, -50, 0),
+		150,
+		100,
 		true
 	)
 
