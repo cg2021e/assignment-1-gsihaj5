@@ -73,7 +73,6 @@ export default class Geometry {
 		let faceNormals = []
 
 		this._normals.forEach(normal => faceNormals.push(...normal.getArray()))
-		console.log(faceNormals)
 
 		return faceNormals
 	}
@@ -84,7 +83,6 @@ export default class Geometry {
 	}
 
 	getVerticeArray () {
-		console.log('get vertice')
 		let vertices = []
 
 		this._faces.forEach((faces) => {
