@@ -1,5 +1,7 @@
 export default class Scene {
 	geometries = []
+	cameraPosition = [0, 0, 3]
+	lightPosition = [0, 0, .7]
 
 	constructor (domElement) {
 		this.domElement = domElement
@@ -183,8 +185,8 @@ export default class Scene {
 		this._bindArrayInsideShader(normals, 'aNormal')
 		this._bindArrayInsideShader(speculars, 'aShininessConstant')
 		this._bindUniformArrayInsideShader([1, 1, 1], 'uLightConstant')
-		this._bindUniformArrayInsideShader([0, 0, 0], 'uLightPosition')
-		this._bindUniformArrayInsideShader([0, 0, 3], 'uCameraPosition')
+		this._bindUniformArrayInsideShader(this.lightPosition, 'uLightPosition')
+		this._bindUniformArrayInsideShader(this.cameraPosition, 'uCameraPosition')
 		this._bindUniformDataInsideShader(.414, 'uAmbientIntensity')
 		console.log(speculars)
 		console.log(vertices)
