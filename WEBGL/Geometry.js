@@ -13,6 +13,10 @@ export default class Geometry {
 		this.specular = specular
 	}
 
+	calculateNormal () {
+		this._calculateNormals(this.getVertices())
+	}
+
 	_calculateNormals (vertices) {
 		for (let vertice_index = 0; vertice_index < vertices.length; vertice_index += 3) {
 			let vertice1 = vertices[vertice_index]
@@ -69,12 +73,13 @@ export default class Geometry {
 		let faceNormals = []
 
 		this._normals.forEach(normal => faceNormals.push(...normal.getArray()))
+		console.log(faceNormals)
 
 		return faceNormals
 	}
 
 	getSpecular () {
-		let specular = Array(this._vertices.length).fill(this.specular)
+		let specular = Array(this.getVerticeArray().length).fill(this.specular)
 		return specular
 	}
 

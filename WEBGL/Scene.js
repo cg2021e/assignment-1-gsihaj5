@@ -188,9 +188,9 @@ export default class Scene {
 		this._bindUniformArrayInsideShader(this.lightPosition, 'uLightPosition')
 		this._bindUniformArrayInsideShader(this.cameraPosition, 'uCameraPosition')
 		this._bindUniformDataInsideShader(.414, 'uAmbientIntensity')
-		console.log(speculars)
-		console.log(vertices)
-		console.log(normals)
+		console.log('specular length ' + speculars.length)
+		console.log('vertices length ' + vertices.length)
+		console.log('normals length ' + normals.length)
 
 		this.context.drawArrays(this.context.TRIANGLES, 0, vertices.length / 3)
 	}

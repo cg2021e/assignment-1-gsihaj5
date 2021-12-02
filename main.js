@@ -30,25 +30,25 @@ function main () {
 	)
 
 	scene.add(bottle1)
-	// let label = new Geometry(bottle1.position.clone(), new Color(60, 60, 60))
-	//
-	// let offsetX = -45;
-	// let offsetY = -20;
-	// let offsetZ = 100;
-	// let width = 15
-	// let height = 25
-	//
-	// label.addVertice(new Vector3(offsetX + 3, offsetY + 1, offsetZ)) //krii bawh
-	// label.addVertice(new Vector3(offsetX + width + 3, offsetY, offsetZ)) // kanan bawah
-	// label.addVertice(new Vector3(offsetX, offsetY + height, offsetZ))// kiri atas
-	// label.addVertice(new Vector3(offsetX + width, offsetY + height, offsetZ)) //kanan atas
-	//
-	//
-	// label.addFace(new Face(0, 1, 2))
-	// label.addFace(new Face(1, 2, 3))
-	//
-	//
-	// scene.add(label)
+	let label = new Geometry(bottle1.position.clone(), new Color(60, 60, 60))
+
+	let offsetX = -45
+	let offsetY = -35
+	let offsetZ = 100
+	let width = 15
+	let height = 20
+
+	label.addVertice(new Vector3(offsetX + 3, offsetY + 1, offsetZ)) //krii bawh
+	label.addVertice(new Vector3(offsetX + width + 3, offsetY, offsetZ)) // kanan bawah
+	label.addVertice(new Vector3(offsetX, offsetY + height, offsetZ))// kiri atas
+	label.addVertice(new Vector3(offsetX + width, offsetY + height, offsetZ)) //kanan atas
+
+	label.addFace(new Face(0, 1, 3))
+	label.addFace(new Face(0, 3, 2))
+
+	label.calculateNormal()
+
+	scene.add(label)
 
 	scene.render()
 }
