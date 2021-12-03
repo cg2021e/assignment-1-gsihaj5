@@ -2,6 +2,7 @@ export default class Scene {
 	geometries = []
 	cameraPosition = [0, 0, 3]
 	lightPosition = [0, 0, .7]
+	lookAt = [0, 0, 0]
 
 	constructor (domElement) {
 		this.domElement = domElement
@@ -170,13 +171,14 @@ export default class Scene {
 		let PMatrixPointer = this.context.getUniformLocation(this.shaderProgram, 'uProjectionMatrix')
 		this.context.uniformMatrix4fv(PMatrixPointer, false, projection_matrix)
 
-		let viewMatrix = [
-			1, 0, 0, 0,
-			0, 1, 0, 0,
-			0, 0, 1, 0,
-			0, 0, 0, 1
-		]
-		viewMatrix[14] = viewMatrix[14] - 3
+		let viewMatrix = glMatrix.mat4.create()
+		glMatrix.mat4.lookAt(
+			viewMatrix,
+			this.cameraPosition,      // camera position
+			this.lookAt,      // the point where camera looks at
+			[0, 1, 0]       // up vector of the camera
+		)
+
 		let VMatrixPointer = this.context.getUniformLocation(this.shaderProgram, 'uViewMatrix')
 		this.context.uniformMatrix4fv(VMatrixPointer, false, viewMatrix)
 

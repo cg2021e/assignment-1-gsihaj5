@@ -42,23 +42,35 @@ function main () {
 		if (event.keyCode === 87) {
 			box.position.y += 10
 			scene.lightPosition[1] += 10
+			scene.render()
 		}
 		//S
 		if (event.keyCode === 83) {
 			box.position.y -= 10
 			scene.lightPosition[1] -= 10
+			scene.render()
 		}
-		scene.render()
-
+		//A
+		if (event.keyCode === 65) {
+			scene.cameraPosition[0] -= .5
+			scene.lookAt[0] -= .5
+			scene.render()
+		}
+		//D
+		if (event.keyCode === 68) {
+			scene.cameraPosition[0] += .5
+			scene.lookAt[0] += .5
+			scene.render()
+		}
 	})
 }
 
 function createLabel () {
 	let label = new Geometry(bottle1.position.clone(), new Color(60, 60, 60))
 
-	let offsetX = 5
-	let offsetY = 15
-	let offsetZ = 100
+	let offsetX = -5
+	let offsetY = 7
+	let offsetZ = 40
 	let width = 15
 	let height = 20
 
