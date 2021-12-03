@@ -116,6 +116,7 @@ export default class EssentialOilBottle extends Geometry {
 		this._geometries.forEach((geometry) => {
 			vec3Vertice.push(...geometry.getVertices())
 		})
+		this._normals = []
 
 		let tempVertices = []
 
