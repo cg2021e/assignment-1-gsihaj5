@@ -39,7 +39,6 @@ function main () {
 	scene.render()
 
 	window.addEventListener('keydown', (event) => {
-		console.log(event)
 		if (event.keyCode === 32) {
 			scene.isShining = !scene.isShining
 			scene.render()
@@ -69,31 +68,33 @@ function main () {
 			scene.render()
 		}
 
+		let cameraSpeed = .01
+
 		//UP
 		if (event.keyCode === 38) {
-			scene.cameraPosition[2] -= .5
-			scene.lookAt[2] -= .5
+			scene.cameraPosition[2] -= cameraSpeed
+			scene.lookAt[2] -= cameraSpeed
 			scene.render(false)
 		}
 
 		//DOWN
 		if (event.keyCode === 40) {
-			scene.cameraPosition[2] += .5
-			scene.lookAt[2] += .5
+			scene.cameraPosition[2] += cameraSpeed
+			scene.lookAt[2] += cameraSpeed
 			scene.render(false)
 		}
 
 		//Left
 		if (event.keyCode === 37) {
-			scene.cameraPosition[0] -= .5
-			scene.lookAt[0] -= .5
+			scene.cameraPosition[0] -= cameraSpeed
+			scene.lookAt[0] -= cameraSpeed
 			scene.render(false)
 		}
 
 		//Right
 		if (event.keyCode === 39) {
-			scene.cameraPosition[0] += .5
-			scene.lookAt[0] += .5
+			scene.cameraPosition[0] += cameraSpeed
+			scene.lookAt[0] += cameraSpeed
 			scene.render(false)
 		}
 	})
