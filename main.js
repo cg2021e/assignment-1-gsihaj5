@@ -44,6 +44,58 @@ function main () {
 			scene.isShining = !scene.isShining
 			scene.render()
 		}
+		//W
+		if (event.keyCode === 87) {
+			box.position.z -= 10
+			scene.lightPosition[2] -= 10 / 100
+			scene.render()
+		}
+		//S
+		if (event.keyCode === 83) {
+			box.position.z += 10
+			scene.lightPosition[2] += 10 / 100
+			scene.render()
+		}
+		//A
+		if (event.keyCode === 65) {
+			box.position.x -= 10
+			scene.lightPosition[0] -= 10 / 100
+			scene.render()
+		}
+		//D
+		if (event.keyCode === 68) {
+			box.position.x += 10
+			scene.lightPosition[0] += 10 / 100
+			scene.render()
+		}
+
+		//UP
+		if (event.keyCode === 38) {
+			scene.cameraPosition[2] -= .5
+			scene.lookAt[2] -= .5
+			scene.render()
+		}
+
+		//DOWN
+		if (event.keyCode === 40) {
+			scene.cameraPosition[2] += .5
+			scene.lookAt[2] += .5
+			scene.render()
+		}
+
+		//Left
+		if (event.keyCode === 37) {
+			scene.cameraPosition[0] += .5
+			scene.lookAt[0] += .5
+			scene.render()
+		}
+
+		//Right
+		if (event.keyCode === 39) {
+			scene.cameraPosition[0] -= .5
+			scene.lookAt[0] -= .5
+			scene.render()
+		}
 	})
 
 }
