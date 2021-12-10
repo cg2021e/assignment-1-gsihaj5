@@ -35,8 +35,27 @@ function main () {
 	let box = createBox()
 	scene.add(box)
 
+	scene.add(createPlane())
 	scene.render()
 
+}
+
+function createPlane () {
+	let plane = new Geometry(new Vector3(0, 0, 0), new Color(18, 65, 36)) //this rgb representation of #124124
+
+	let width = 20
+	let height = 20
+	let y = -60
+
+	plane.addVertice(new Vector3(-width / 2, y, -height / 2)) //kiri bawah
+	plane.addVertice(new Vector3(width / 2, y, -height / 2)) //kanan bawah
+	plane.addVertice(new Vector3(-width / 2, y, height / 2)) //kiri atas
+	plane.addVertice(new Vector3(width / 2, y, height / 2)) //kanan atas
+
+	plane.addFace(new Face(0, 1, 3))
+	plane.addFace(new Face(0, 3, 2))
+	plane.calculateNormal()
+	return plane
 }
 
 function createLabel () {
