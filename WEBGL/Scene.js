@@ -13,6 +13,7 @@ export default class Scene {
 			return
 		}
 		this._createShaderProgram()
+		this.isShining = true
 	}
 
 	_createShaderProgram () {
@@ -65,6 +66,7 @@ export default class Scene {
             uniform vec3 uLightPosition;
             uniform vec3 uCameraPosition;
             uniform float uAmbientIntensity;
+            uniform bool uIsShining;
             
             void main(){
                 vec3 ambient = uLightConstant * uAmbientIntensity;
@@ -92,7 +94,14 @@ export default class Scene {
                 }
                 
                 vec3 phong = ambient + diffuse + specular;
-                gl_FragColor = vec4(phong.x * vColor.x, phong.y * vColor.y, phong.z * vColor.z, vColor.w);
+                
+                if(uIsShining){
+                	gl_FragColor = vec4(phong.x * vColor.x, phong.y * vColor.y, phong.z * vColor.z, vColor.w);
+                } else {
+                	gl_FragColor = vec4(ambient.x * vColor.x, ambient.y * vColor.y, ambient.z * vColor.z, vColor.w);
+                
+                }
+                
             }`
 
 		let fragmentShader = this.context.createShader(this.context.FRAGMENT_SHADER)
@@ -190,6 +199,7 @@ export default class Scene {
 		this._bindUniformArrayInsideShader(this.lightPosition, 'uLightPosition')
 		this._bindUniformArrayInsideShader(this.cameraPosition, 'uCameraPosition')
 		this._bindUniformDataInsideShader(.324, 'uAmbientIntensity')
+		this._bindUniformDataInsideShader(this.isShining, 'uIsShining')
 		console.log(this.lightPosition)
 		console.log(vertices)
 		console.log(colors)

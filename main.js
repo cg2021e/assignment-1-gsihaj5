@@ -38,6 +38,14 @@ function main () {
 	scene.add(createPlane())
 	scene.render()
 
+	window.addEventListener('keydown', (event) => {
+		console.log(event)
+		if (event.keyCode === 32) {
+			scene.isShining = !scene.isShining
+			scene.render()
+		}
+	})
+
 }
 
 function createPlane () {
