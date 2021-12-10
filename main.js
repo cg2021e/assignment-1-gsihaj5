@@ -12,12 +12,17 @@ let speed = 10
 
 let dragging, rotation = glMatrix.mat4.create()
 
+let angle = 90
+let distance = 3
+
 let lastPointOnTrackBall, currentPointOnTrackBall
 let lastQuat = glMatrix.quat.create()
 
 function main () {
 	canvas = document.querySelector('#glCanvas')
 	scene = new Scene(canvas)
+	scene.cameraPosition[0] = distance * Math.cos(angle * Math.PI / 180)
+	scene.cameraPosition[2] = distance * Math.sin(angle * Math.PI / 180)
 
 	bottle = new EssentialOilBottle(
 		new Vector3(50, -50, 0),
@@ -73,34 +78,39 @@ function main () {
 			scene.render()
 		}
 
-		let cameraSpeed = .01
+		let cameraSpeed = .05
 
 		//UP
 		if (event.keyCode === 38) {
-			scene.cameraPosition[2] -= cameraSpeed
-			scene.lookAt[2] -= cameraSpeed
+			distance -= cameraSpeed
+			scene.cameraPosition[0] = distance * Math.cos(angle * Math.PI / 180)
+			scene.cameraPosition[2] = distance * Math.sin(angle * Math.PI / 180)
 			scene.render(false)
 		}
 
 		//DOWN
 		if (event.keyCode === 40) {
-			scene.cameraPosition[2] += cameraSpeed
-			scene.lookAt[2] += cameraSpeed
+			distance += cameraSpeed
+			scene.cameraPosition[0] = distance * Math.cos(angle * Math.PI / 180)
+			scene.cameraPosition[2] = distance * Math.sin(angle * Math.PI / 180)
 			scene.render(false)
 		}
 
 		//Left
 		if (event.keyCode === 37) {
-			scene.cameraPosition[0] -= cameraSpeed
-			scene.lookAt[0] -= cameraSpeed
+			angle += cameraSpeed * 100
+			scene.cameraPosition[0] = distance * Math.cos(angle * Math.PI / 180)
+			scene.cameraPosition[2] = distance * Math.sin(angle * Math.PI / 180)
 			scene.render(false)
 		}
 
 		//Right
 		if (event.keyCode === 39) {
-			scene.cameraPosition[0] += cameraSpeed
-			scene.lookAt[0] += cameraSpeed
+			angle -= cameraSpeed * 100
+			scene.cameraPosition[0] = distance * Math.cos(angle * Math.PI / 180)
+			scene.cameraPosition[2] = distance * Math.sin(angle * Math.PI / 180)
 			scene.render(false)
+
 		}
 	})
 
