@@ -117,6 +117,10 @@ function main () {
 	document.addEventListener('mousedown', onMouseDown, false)
 	document.addEventListener('mouseup', onMouseUp, false)
 	document.addEventListener('mousemove', onMouseMove, false)
+
+	document.addEventListener('touchstart', onTouchStart, false)
+	document.addEventListener('touchend', onMouseUp, false)
+	document.addEventListener('touchmove', onTouchMove, false)
 }
 
 function computeCurrentQuat () {
@@ -160,6 +164,14 @@ function onMouseDown (event) {
 	currentPointOnTrackBall = lastPointOnTrackBall
 }
 
+function onTouchStart (event) {
+	let x = event.changedTouches[0].clientX
+	let y = event.changedTouches[0].clientY
+	dragging = true
+	lastPointOnTrackBall = getProjectionPointOnSurface(glMatrix.vec3.fromValues(x, y, 0))
+	currentPointOnTrackBall = lastPointOnTrackBall
+}
+
 function onMouseUp (event) {
 	dragging = false
 	if (currentPointOnTrackBall !== lastPointOnTrackBall) {
@@ -171,6 +183,18 @@ function onMouseMove (event) {
 	if (dragging) {
 		var x = event.clientX
 		var y = event.clientY
+		currentPointOnTrackBall = getProjectionPointOnSurface(glMatrix.vec3.fromValues(x, y, 0))
+		glMatrix.mat4.fromQuat(rotation, computeCurrentQuat())
+
+		scene.rotation = rotation
+		scene.render(false)
+	}
+}
+
+function onTouchMove (event) {
+	if (dragging) {
+		let x = event.changedTouches[0].clientX
+		let y = event.changedTouches[0].clientY
 		currentPointOnTrackBall = getProjectionPointOnSurface(glMatrix.vec3.fromValues(x, y, 0))
 		glMatrix.mat4.fromQuat(rotation, computeCurrentQuat())
 
