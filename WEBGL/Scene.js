@@ -145,23 +145,26 @@ export default class Scene {
 		})
 	}
 
-	render () {
-		let vertices = []
-		let colors = []
-		let normals = []
-		let speculars = []
+	render (isChangeVertice = true) {
 
-		this.geometries.forEach((geometry) => {
-			vertices.push(...geometry.getVerticeArray())
-			colors.push(...geometry.getColorArray())
-			normals.push(...geometry.getNormalArray())
-			speculars.push(...geometry.getSpecular())
-		})
+		if (isChangeVertice) {
+			this.vertices = []
+			this.colors = []
+			this.normals = []
+			this.speculars = []
 
-		vertices = new Float32Array([...vertices])
-		colors = new Float32Array([...colors])
-		normals = new Float32Array([...normals])
-		speculars = new Float32Array([...speculars])
+			this.geometries.forEach((geometry) => {
+				this.vertices.push(...geometry.getVerticeArray())
+				this.colors.push(...geometry.getColorArray())
+				this.normals.push(...geometry.getNormalArray())
+				this.speculars.push(...geometry.getSpecular())
+			})
+
+			this.vertices = new Float32Array([...this.vertices])
+			this.colors = new Float32Array([...this.colors])
+			this.normals = new Float32Array([...this.normals])
+			this.speculars = new Float32Array([...this.speculars])
+		}
 
 		this.context.enable(this.context.DEPTH_TEST)
 		this.context.depthFunc(this.context.LEQUAL)
@@ -191,22 +194,17 @@ export default class Scene {
 		let VMatrixPointer = this.context.getUniformLocation(this.shaderProgram, 'uViewMatrix')
 		this.context.uniformMatrix4fv(VMatrixPointer, false, viewMatrix)
 
-		this._bindArrayInsideShader(vertices, 'aCoordinates')
-		this._bindArrayInsideShader(colors, 'aColors')
-		this._bindArrayInsideShader(normals, 'aNormal')
-		this._bindArrayInsideShader(speculars, 'aShininessConstant')
+		this._bindArrayInsideShader(this.vertices, 'aCoordinates')
+		this._bindArrayInsideShader(this.colors, 'aColors')
+		this._bindArrayInsideShader(this.normals, 'aNormal')
+		this._bindArrayInsideShader(this.speculars, 'aShininessConstant')
 		this._bindUniformArrayInsideShader([1, 1, 1], 'uLightConstant')
 		this._bindUniformArrayInsideShader(this.lightPosition, 'uLightPosition')
 		this._bindUniformArrayInsideShader(this.cameraPosition, 'uCameraPosition')
 		this._bindUniformDataInsideShader(.324, 'uAmbientIntensity')
 		this._bindUniformDataInsideShader(this.isShining, 'uIsShining')
-		console.log(this.lightPosition)
-		console.log(vertices)
-		console.log(colors)
-		console.log(normals)
-		console.log(speculars)
 
-		this.context.drawArrays(this.context.TRIANGLES, 0, vertices.length / 3)
+		this.context.drawArrays(this.context.TRIANGLES, 0, this.vertices.length / 3)
 	}
 
 	get_projection (angle, a, zMin, zMax) {
