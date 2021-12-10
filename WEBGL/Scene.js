@@ -14,6 +14,12 @@ export default class Scene {
 		}
 		this._createShaderProgram()
 		this.isShining = true
+		this.rotation = [
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1,
+		]
 	}
 
 	_createShaderProgram () {
@@ -32,12 +38,13 @@ export default class Scene {
             attribute float aShininessConstant;
             uniform mat4 uProjectionMatrix;
             uniform mat4 uViewMatrix;
+            uniform mat4 uRotationMatrix;
             varying vec4 vColor;
             varying vec3 vCoordinates;
             varying vec3 vNormal;
             varying float vShininessConstant;
             void main(){
-                gl_Position =  uProjectionMatrix * uViewMatrix *  vec4(aCoordinates.x / 100.0, aCoordinates.y / 100.0, aCoordinates.z / 100.0, 1.0);
+                gl_Position =  uProjectionMatrix * uViewMatrix * uRotationMatrix * vec4(aCoordinates.x / 100.0, aCoordinates.y / 100.0, aCoordinates.z / 100.0, 1.0);
                 vColor = vec4(aColors, 1);
                 vNormal = aNormal;
                 vCoordinates = vec3(aCoordinates.x / 100.0, aCoordinates.y / 100.0, aCoordinates.z / 100.0);
@@ -125,6 +132,12 @@ export default class Scene {
 		this.context.enableVertexAttribArray(coordinate)
 	}
 
+	_bindUniformMat4InsideShader (arrayToBePushed, shaderUniform) {
+
+		let uniform = this.context.getUniformLocation(this.shaderProgram, shaderUniform)
+		this.context.uniformMatrix4fv(uniform, false, arrayToBePushed)
+	}
+
 	_bindUniformArrayInsideShader (arrayToBePushed, shaderUniform) {
 		let uniform = this.context.getUniformLocation(this.shaderProgram, shaderUniform)
 		this.context.uniform3fv(uniform, arrayToBePushed)
@@ -201,6 +214,7 @@ export default class Scene {
 		this._bindUniformArrayInsideShader([1, 1, 1], 'uLightConstant')
 		this._bindUniformArrayInsideShader(this.lightPosition, 'uLightPosition')
 		this._bindUniformArrayInsideShader(this.cameraPosition, 'uCameraPosition')
+		this._bindUniformMat4InsideShader(this.rotation, 'uRotationMatrix')
 		this._bindUniformDataInsideShader(.324, 'uAmbientIntensity')
 		this._bindUniformDataInsideShader(this.isShining, 'uIsShining')
 
