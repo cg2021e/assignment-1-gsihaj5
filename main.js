@@ -226,16 +226,29 @@ function createBox () {
 	cube.addVertice(new Vector3(-width / 2, -height / 2, depth / 2))//depan kiri
 	cube.addVertice(new Vector3(-width / 2, -height / 2, -depth / 2))//belakang kiri
 
-	//bawah
+	//atas
 	cube.addFace(new Face(0, 2, 1))
-	cube.addFace(new Face(2, 3, 0))
+	cube.addFace(new Face(1, 2, 3))
 
 	//depan
 	cube.addFace(new Face(0, 4, 2))
 	cube.addFace(new Face(2, 4, 6))
-	//atas
+
+	//bawah
 	cube.addFace(new Face(4, 5, 6))
 	cube.addFace(new Face(6, 5, 7))
+
+	//kanan
+	cube.addFace(new Face(0, 5, 1))
+	cube.addFace(new Face(0, 4, 5))
+
+	//kiri
+	cube.addFace(new Face(2, 3, 7))
+	cube.addFace(new Face(2, 7, 6))
+
+	//belakang
+	cube.addFace(new Face(1, 5, 3))
+	cube.addFace(new Face(3, 7, 5))
 
 	cube.calculateNormal()
 	return cube
